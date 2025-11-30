@@ -52,7 +52,7 @@ This section guides you through submitting an enhancement suggestion for Plushie
 We love seeing new plushies added to the database! Here is how to do it properly:
 
 1.  **Image Requirements**:
-    *   Format: **PNG** (Transparent background preferred)
+    *   Format: **PNG**
     *   Quality: High resolution, well-lit
     *   Filename: `tech-name-plushie-name.png` (e.g., `rust-ferris.png`) - **MUST MATCH MD FILENAME**
     *   Location: `src/assets/`
