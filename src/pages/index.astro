@@ -7,8 +7,9 @@ import PlaceholderCard from "../components/PlaceholderCard.astro";
 import { getCollection } from "astro:content";
 
 const plushies = await getCollection("plushies");
-const placeholderCount = 7; // Add 7 placeholder cards to fill the grid
 const itemsPerPage = 8; // Show 8 items initially
+const columns = 4;
+const placeholderCount = columns - (plushies.length % columns);
 ---
 
 <Layout title="Plushies.dev // The Open Source Tech Plushie Database">
