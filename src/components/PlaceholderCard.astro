@@ -6,28 +6,28 @@ interface Props {
 const { class: className } = Astro.props;
 ---
 
-<article class:list={["specimen-card", "opacity-30", className]}>
+<a href="/contribute" class:list={["specimen-card", "opacity-60 hover:opacity-100 transition-opacity duration-300", className]} style="text-decoration: none; color: inherit;">
     <div class="card-header">
-        <span>ID: COMING_SOON</span>
-        <span>[LOCKED]</span>
+        <span>ID: MISSING_DATA</span>
+        <span class="text-[var(--accent-neon)] animate-pulse">[OPEN]</span>
     </div>
     <div class="card-visual">
         <div class="visual-grid"></div>
         <div
-            class="plush-img flex items-center justify-center text-[var(--text-muted)] text-6xl"
+            class="plush-img flex items-center justify-center text-[var(--accent-neon)] text-6xl opacity-50"
         >
-            ?
+            +
         </div>
     </div>
-    <div class="rarity-tag">COMING SOON // ARCHIVE</div>
+    <div class="rarity-tag">CONTRIBUTE // ARCHIVE</div>
     <div class="card-footer">
-        <span class="specimen-tech">// PLACEHOLDER</span>
-        <h2 class="specimen-name">More Coming Soon</h2>
+        <span class="specimen-tech">// DATABASE_EXPANSION</span>
+        <h2 class="specimen-name">Missing One?</h2>
         <div class="action-row">
             <span style="font-family:'Space Mono'; font-size:0.7rem; color:#555"
-                >QTY: ?</span
+                >QTY: ∞</span
             >
-            <button class="btn-archive" disabled>LOCKED</button>
+            <span class="btn-archive text-[10px] hover:bg-[var(--accent-neon)] hover:text-black hover:border-[var(--accent-neon)]">ADD PLUSHIE</span>
         </div>
     </div>
-</article>
+</a>

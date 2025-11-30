@@ -1,0 +1,162 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Header from "../components/Header.astro";
+---
+
+<Layout title="Contribute to Plushies.dev">
+    <Header />
+    
+    <div class="wrapper" style="max-width: 1200px;">
+        
+        <!-- HUGE Hero -->
+        <div class="flex flex-col items-center justify-center text-center mb-32 mt-20 w-full">
+            <div class="inline-block px-4 py-2 border border-[var(--accent-neon)] rounded-full text-xs font-mono text-[var(--accent-neon)] uppercase mb-8 tracking-widest animate-pulse">
+                // MISSION_ACTIVE
+            </div>
+            <h1 class="text-6xl md:text-8xl font-bold uppercase tracking-tight leading-none mb-12">
+                Add Your<br/>
+                <span class="text-[var(--accent-neon)]">Plushie</span>
+            </h1>
+            <div class="w-full flex justify-center">
+                <p class="text-xl md:text-2xl text-[var(--text-main)] max-w-3xl leading-relaxed font-light text-center">
+                    Got a tech plushie we're missing?<br/>
+                    It takes <span class="text-[var(--accent-neon)] font-bold">5 minutes</span> to add it to the database.
+                </p>
+            </div>
+        </div>
+
+        <!-- SPACER -->
+        <div class="h-20"></div>
+
+        <!-- Simple 3-step guide with TONS of space -->
+        <div class="space-y-20 mb-32">
+            
+            <!-- Step 1 -->
+            <div class="flex flex-col md:flex-row items-center gap-12">
+                <div class="text-9xl font-bold text-[var(--accent-neon)] opacity-20 md:w-1/4 text-center">
+                    01
+                </div>
+                <div class="md:w-3/4">
+                    <h2 class="text-4xl md:text-5xl font-bold uppercase mb-6">Take a Photo</h2>
+                    <p class="text-xl text-[var(--text-main)] leading-relaxed">
+                        Grab your phone. Snap a clean picture of your plushie.<br/>
+                        <span class="text-[var(--text-muted)]">PNG format works best. Transparent background = extra love.</span>
+                    </p>
+                </div>
+            </div>
+
+            <!-- Step 2 -->
+            <div class="flex flex-col md:flex-row items-center gap-12">
+                <div class="text-9xl font-bold text-[var(--accent-neon)] opacity-20 md:w-1/4 text-center">
+                    02
+                </div>
+                <div class="md:w-3/4">
+                    <h2 class="text-4xl md:text-5xl font-bold uppercase mb-6">Create 2 Files</h2>
+                    <div class="space-y-6">
+                        <div class="bg-black/50 border border-[var(--card-border)] p-6 rounded flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+                            <div class="flex items-center gap-3">
+                                <span class="text-2xl">📸</span>
+                                <code class="text-[var(--accent-cyan)] font-mono text-lg">your-plushie.png</code>
+                            </div>
+                            <div class="flex items-center gap-2 text-[var(--text-muted)] font-mono text-sm">
+                                <span>→ Drop it in</span>
+                                <code class="text-[var(--accent-neon)] border border-[var(--accent-neon)]/30 px-2 py-1 rounded">src/assets/</code>
+                            </div>
+                        </div>
+                        <div class="bg-black/50 border border-[var(--card-border)] p-6 rounded flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+                            <div class="flex items-center gap-3">
+                                <span class="text-2xl">📝</span>
+                                <code class="text-[var(--accent-cyan)] font-mono text-lg">your-plushie.md</code>
+                            </div>
+                            <div class="flex items-center gap-2 text-[var(--text-muted)] font-mono text-sm">
+                                <span>→ Create it in</span>
+                                <code class="text-[var(--accent-neon)] border border-[var(--accent-neon)]/30 px-2 py-1 rounded">src/content/plushies/</code>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 3 -->
+            <div class="flex flex-col md:flex-row items-center gap-12">
+                <div class="text-9xl font-bold text-[var(--accent-neon)] opacity-20 md:w-1/4 text-center">
+                    03
+                </div>
+                <div class="md:w-3/4">
+                    <h2 class="text-4xl md:text-5xl font-bold uppercase mb-6">Open a PR</h2>
+                    <p class="text-xl text-[var(--text-main)] leading-relaxed">
+                        Push to GitHub. Open a Pull Request.<br/>
+                        <span class="text-[var(--text-muted)]">That's it. We'll handle the rest.</span>
+                    </p>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- SPACER -->
+        <div class="h-32"></div>
+
+        <!-- Markdown Template -->
+        <div class="mb-32 w-full flex flex-col items-center">
+            <h3 class="text-3xl font-bold uppercase mb-8 text-center">Markdown Template</h3>
+            <div class="w-full max-w-2xl">
+                <div class="bg-[#0a0a0a] border border-[var(--accent-neon)]/30 rounded-xl p-8 text-left w-full">
+                    <pre class="text-base font-mono text-[var(--text-main)] leading-loose overflow-x-auto"><code>---
+name: "Your Plushie Name"
+techs: ["Tech", "Framework"]
+official_link: "https://buy-link.com"
+---
+
+Short description here.</code></pre>
+                </div>
+            </div>
+        </div>
+
+        <!-- SPACER -->
+        <div class="h-32"></div>
+
+        <!-- Important Note -->
+        <div class="flex justify-center mb-32">
+            <div class="max-w-4xl w-full bg-gradient-to-b from-[var(--accent-neon)]/10 to-transparent border border-[var(--accent-neon)] p-12 rounded-xl flex flex-col items-center text-center shadow-[0_0_30px_rgba(204,255,0,0.1)]">
+                <p class="text-2xl font-bold mb-4 text-[var(--accent-neon)]">⚡ Important Rule</p>
+                <p class="text-xl text-[var(--text-main)] leading-relaxed mb-6">
+                    Both files <span class="text-white font-bold border-b-2 border-[var(--accent-neon)]">must have the exact same name</span>.
+                </p>
+                <div class="flex flex-col md:flex-row gap-4 items-center justify-center text-lg font-mono text-[var(--text-muted)]">
+                    <span class="bg-black/30 px-4 py-2 rounded border border-[var(--card-border)] text-[var(--accent-cyan)]">rust-ferris.png</span>
+                    <span>+</span>
+                    <span class="bg-black/30 px-4 py-2 rounded border border-[var(--card-border)] text-[var(--accent-cyan)]">rust-ferris.md</span>
+                    <span class="text-[var(--accent-neon)] text-2xl ml-2">✓</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- SPACER -->
+        <div class="h-20"></div>
+
+        <!-- Big CTA -->
+        <div class="text-center mb-32">
+            <a 
+                href="https://github.com/yoanbernabeu/plushies.dev" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                class="inline-block bg-[var(--accent-neon)] text-black font-bold text-2xl px-16 py-8 rounded-lg uppercase tracking-tight hover:scale-105 transition-transform shadow-[0_0_30px_rgba(204,255,0,0.3)]"
+            >
+                Open GitHub →
+            </a>
+            <p class="mt-8 text-[var(--text-muted)] text-lg">
+                Need help? Read the <a href="https://github.com/yoanbernabeu/plushies.dev/blob/main/CONTRIBUTING.md" target="_blank" class="text-[var(--accent-neon)] underline">full guide</a>
+            </p>
+        </div>
+
+    </div>
+</Layout>
+
+<style>
+    code {
+        font-family: 'Space Mono', monospace;
+        background: rgba(0,0,0,0.5);
+        padding: 0.2em 0.5em;
+        border-radius: 4px;
+    }
+</style>

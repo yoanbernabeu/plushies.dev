@@ -2,6 +2,7 @@
 import type { CollectionEntry } from "astro:content";
 import { Picture } from "astro:assets";
 import LikeButton from "./LikeButton";
+import { getPlushieImage } from "../utils/images";
 
 interface Props {
     plushie: CollectionEntry<"plushies">;
@@ -10,6 +11,9 @@ interface Props {
 
 const { plushie, class: className } = Astro.props;
 const { data, slug } = plushie;
+
+// Dynamic image resolution
+const imageSrc = getPlushieImage(slug);
 ---
 
 <a
@@ -23,14 +27,16 @@ const { data, slug } = plushie;
     </div>
     <div class="card-visual">
         <div class="visual-grid"></div>
-        <Picture
-            src={data.image}
-            alt={data.name}
-            formats={['avif', 'webp']}
-            pictureAttributes={{ class: "plush-img" }}
-            width={300}
-            height={300}
-        />
+        {imageSrc && (
+            <Picture
+                src={imageSrc}
+                alt={data.name}
+                formats={['avif', 'webp']}
+                pictureAttributes={{ class: "plush-img" }}
+                width={300}
+                height={300}
+            />
+        )}
     </div>
     <div class="rarity-tag">CONFIDENTIAL // ARCHIVE</div>
     <div class="card-footer">

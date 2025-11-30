@@ -5,6 +5,8 @@ import Layout from "../../layouts/Layout.astro";
 import Header from "../../components/Header.astro";
 import { Picture } from "astro:assets";
 import LikeButton from "../../components/LikeButton";
+import CollectorList from "../../components/CollectorList";
+import { getPlushieImage } from "../../utils/images";
 
 export async function getStaticPaths() {
     const plushies = await getCollection("plushies");
@@ -16,6 +18,9 @@ export async function getStaticPaths() {
 
 const { entry } = Astro.props;
 const { Content } = await entry.render();
+
+// Dynamic image resolution
+const imageSrc = getPlushieImage(entry.slug);
 ---
 
 <Layout title={entry.data.name}>
@@ -25,7 +30,7 @@ const { Content } = await entry.render();
             href="/"
             class="btn-archive"
             style="margin-bottom: 2rem; display: inline-block;"
-            >&larr; BACK TO ARCHIVE</a
+            >&larr; SYSTEM_ROOT</a
         >
 
         <article class="specimen-card" style="height: auto; padding: 2rem;">
@@ -36,12 +41,14 @@ const { Content } = await entry.render();
 
             <div class="card-visual" style="height: 400px; margin: 2rem 0;">
                 <div class="visual-grid"></div>
-                <Picture
-                    src={entry.data.image}
-                    alt={entry.data.name}
-                    formats={['avif', 'webp']}
-                    pictureAttributes={{ class: "plush-img", style: "width: 50%;" }}
-                />
+                {imageSrc && (
+                    <Picture
+                        src={imageSrc}
+                        alt={entry.data.name}
+                        formats={['avif', 'webp']}
+                        pictureAttributes={{ class: "plush-img", style: "width: 50%;" }}
+                    />
+                )}
             </div>
 
             <div
@@ -75,12 +82,19 @@ const { Content } = await entry.render();
                 </div>
 
                 <div class="action-row" style="margin-top: 3rem;">
-                    <a
-                        href={entry.data.official_link}
-                        target="_blank"
-                        class="btn-archive">OFFICIAL SOURCE</a
-                    >
-                    <LikeButton slug={entry.slug} client:load />
+                    <div class="flex flex-col gap-4 w-full">
+                        <div class="flex justify-between items-end w-full">
+                            <a
+                                href={entry.data.official_link}
+                                target="_blank"
+                                class="btn-archive">OFFICIAL SOURCE</a
+                            >
+                            <LikeButton slug={entry.slug} client:load />
+                        </div>
+                        <div class="border-t border-[var(--card-border)] pt-4 mt-4">
+                            <CollectorList slug={entry.slug} client:visible />
+                        </div>
+                    </div>
                 </div>
             </div>
         </article>
