@@ -1,6 +1,6 @@
 ---
 name: "Ferris The Crab"
-techs: ["Rust", "WASM"]
+techs: ["Rust"]
 official_link: "https://rustacean.net/"
 image: "../../assets/ferris.png"
 ---

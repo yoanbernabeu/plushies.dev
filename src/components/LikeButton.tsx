@@ -36,7 +36,12 @@ export default function LikeButton({ slug, compact = false }: { slug: string; co
         e.stopPropagation();
 
         if (!user) {
-            alert('Please login to collect plushies!');
+            await supabase.auth.signInWithOAuth({
+                provider: 'github',
+                options: {
+                    redirectTo: window.location.origin
+                }
+            });
             return;
         }
 

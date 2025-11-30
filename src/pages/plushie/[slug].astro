@@ -3,7 +3,7 @@ export const prerender = true;
 import { getCollection } from "astro:content";
 import Layout from "../../layouts/Layout.astro";
 import Header from "../../components/Header.astro";
-import { Image } from "astro:assets";
+import { Picture } from "astro:assets";
 import LikeButton from "../../components/LikeButton";
 
 export async function getStaticPaths() {
@@ -36,11 +36,11 @@ const { Content } = await entry.render();
 
             <div class="card-visual" style="height: 400px; margin: 2rem 0;">
                 <div class="visual-grid"></div>
-                <Image
+                <Picture
                     src={entry.data.image}
                     alt={entry.data.name}
-                    class="plush-img"
-                    style="width: 50%;"
+                    formats={['avif', 'webp']}
+                    pictureAttributes={{ class: "plush-img", style: "width: 50%;" }}
                 />
             </div>
 

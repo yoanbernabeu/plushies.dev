@@ -11,8 +11,27 @@ const placeholderCount = 7; // Add 7 placeholder cards to fill the grid
 const itemsPerPage = 8; // Show 8 items initially
 ---
 
-<Layout title="PLUSHIES_ARCHIVE_V2">
+<Layout title="Plushies.dev // The Tech Plushie Database">
 	<Header />
+
+    <div class="hero-section flex flex-col items-center justify-center text-center pb-16 relative z-10">
+        <div class="inline-block px-3 py-1 border border-[var(--accent-neon)] rounded-full text-[10px] font-mono text-[var(--accent-neon)] uppercase mb-6 tracking-widest backdrop-blur-sm">
+            // OPEN SOURCE COLLECTION
+        </div>
+        <h1 class="text-4xl md:text-7xl font-bold uppercase mb-8 tracking-tighter leading-none">
+            The <span class="text-[var(--accent-neon)]">Tech Plushie</span><br/>
+            Database
+        </h1>
+        <p class="text-[var(--text-muted)] font-mono text-sm md:text-base max-w-2xl mx-auto leading-relaxed uppercase">
+            Build your digital collection of developer companions.
+            <br/>
+            Track, collect and share your softest stack with the community.
+        </p>
+    </div>
+
+    <!-- Spacer to prevent overlap and ensure airiness -->
+    <div class="h-32 w-full"></div>
+
 	<section class="archive-grid" id="grid">
 		{
 			plushies.map((plushie, index) => (
