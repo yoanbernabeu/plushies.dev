@@ -1,0 +1,34 @@
+---
+---
+<div class="cursor-dot" id="cursor-dot"></div>
+<div class="cursor-glow" id="cursor-glow"></div>
+
+<script>
+    // Custom Cursor Logic
+    const dot = document.getElementById('cursor-dot');
+    const glow = document.getElementById('cursor-glow');
+
+    if (dot && glow) {
+        document.addEventListener('mousemove', (e) => {
+            dot.style.left = e.clientX + 'px';
+            dot.style.top = e.clientY + 'px';
+            
+            // Animation différée pour le glow (effet fluide)
+            glow.animate({
+                left: e.clientX + 'px',
+                top: e.clientY + 'px'
+            }, { duration: 500, fill: "forwards" });
+
+            // Update CSS variables for spotlight effect
+            document.querySelectorAll('.specimen-card').forEach(card => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                // @ts-ignore
+                card.style.setProperty('--mouse-x', `${x}px`);
+                // @ts-ignore
+                card.style.setProperty('--mouse-y', `${y}px`);
+            });
+        });
+    }
+</script>

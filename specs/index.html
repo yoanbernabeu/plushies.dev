@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PLUSHIES_ARCHIVE_V2</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;700&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg-color: #050505;
+            --card-bg: rgba(255, 255, 255, 0.03);
+            --card-border: rgba(255, 255, 255, 0.1);
+            --accent-neon: #ccff00; /* Acid Green */
+            --accent-cyan: #00f0ff; /* Cyber Blue */
+            --text-main: #e0e0e0;
+            --text-muted: #555;
+            
+            --cursor-x: 50%;
+            --cursor-y: 50%;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; cursor: none; /* On cache le curseur natif pour le fun */ }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: 'Space Grotesk', sans-serif;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* --- BACKGROUND NOISE & GRID --- */
+        .noise-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none; z-index: 50;
+            opacity: 0.07;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+        }
+
+        .grid-background {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background-image: 
+                linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            z-index: -1;
+            mask-image: radial-gradient(circle at 50% 50%, black 40%, transparent 100%);
+        }
+
+        /* --- CUSTOM CURSOR --- */
+        .cursor-dot {
+            width: 10px; height: 10px; background: var(--accent-neon);
+            position: fixed; top: 0; left: 0; border-radius: 50%;
+            z-index: 100; pointer-events: none;
+            transform: translate(-50%, -50%);
+            mix-blend-mode: difference;
+            transition: transform 0.1s;
+        }
+        .cursor-glow {
+            width: 300px; height: 300px;
+            background: radial-gradient(circle, rgba(204, 255, 0, 0.15) 0%, transparent 70%);
+            position: fixed; top: 0; left: 0; border-radius: 50%;
+            z-index: 99; pointer-events: none;
+            transform: translate(-50%, -50%);
+            filter: blur(20px);
+        }
+
+        /* --- LAYOUT --- */
+        .wrapper { max-width: 1400px; margin: 0 auto; padding: 40px 20px; }
+
+        header {
+            display: flex; justify-content: space-between; align-items: flex-end;
+            margin-bottom: 80px; padding-bottom: 20px;
+            border-bottom: 1px solid var(--card-border);
+        }
+        
+        .brand {
+            font-size: 4rem; line-height: 0.8; font-weight: 300; text-transform: uppercase; letter-spacing: -2px;
+        }
+        .brand span { font-weight: 700; color: var(--accent-neon); }
+        
+        .meta-info {
+            font-family: 'Space Mono', monospace; font-size: 0.8rem; color: var(--text-muted);
+            text-align: right;
+        }
+
+        /* --- THE GRID --- */
+        .archive-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 20px;
+        }
+
+        /* --- THE CARD (SPECIMEN) --- */
+        .specimen-card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            height: 450px;
+            position: relative;
+            display: flex; flex-direction: column;
+            overflow: hidden;
+            transition: all 0.4s ease;
+            backdrop-filter: blur(5px);
+        }
+
+        /* Spotlight Effect on Card Hover */
+        .specimen-card::before {
+            content: "";
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: radial-gradient(
+                800px circle at var(--mouse-x) var(--mouse-y), 
+                rgba(255, 255, 255, 0.06),
+                transparent 40%
+            );
+            z-index: 1; opacity: 0; transition: opacity 0.5s;
+        }
+        .specimen-card:hover::before { opacity: 1; }
+        
+        .specimen-card:hover {
+            border-color: var(--accent-neon);
+            transform: scale(0.98);
+        }
+
+        /* Header of the card (Code style) */
+        .card-header {
+            padding: 15px;
+            font-family: 'Space Mono', monospace;
+            font-size: 0.7rem; color: var(--text-muted);
+            border-bottom: 1px solid var(--card-border);
+            display: flex; justify-content: space-between;
+            z-index: 2;
+        }
+
+        /* Image Area */
+        .card-visual {
+            flex: 1; position: relative;
+            display: flex; align-items: center; justify-content: center;
+            overflow: hidden;
+        }
+        .plush-img {
+            width: 70%; height: auto;
+            filter: grayscale(100%) contrast(1.2); /* Brutalist look */
+            transition: all 0.5s cubic-bezier(0.19, 1, 0.22, 1);
+            z-index: 2;
+        }
+        
+        /* Hover: Color glitch */
+        .specimen-card:hover .plush-img {
+            filter: grayscale(0%);
+            transform: scale(1.1) rotate(2deg);
+        }
+
+        /* The floating grid behind image */
+        .visual-grid {
+            position: absolute; width: 200%; height: 200%;
+            background-image: radial-gradient(var(--text-muted) 1px, transparent 1px);
+            background-size: 20px 20px;
+            opacity: 0.1;
+            transform: perspective(500px) rotateX(60deg) translateY(100px) translateZ(-100px);
+            animation: gridMove 20s linear infinite;
+        }
+        @keyframes gridMove { 0% { transform: perspective(500px) rotateX(60deg) translateY(0); } 100% { transform: perspective(500px) rotateX(60deg) translateY(200px); } }
+
+        /* Footer Info */
+        .card-footer {
+            padding: 20px; z-index: 2;
+            background: rgba(0,0,0,0.4);
+            border-top: 1px solid var(--card-border);
+        }
+
+        .specimen-name {
+            font-size: 1.5rem; font-weight: 700; text-transform: uppercase;
+            margin-bottom: 5px; color: #fff;
+        }
+        .specimen-tech {
+            font-family: 'Space Mono', monospace; font-size: 0.8rem;
+            color: var(--accent-neon); display: block; margin-bottom: 15px;
+        }
+        
+        /* The Cyber Button */
+        .action-row { display: flex; justify-content: space-between; align-items: flex-end; }
+        
+        .btn-archive {
+            background: transparent;
+            border: 1px solid var(--text-muted);
+            color: var(--text-muted);
+            padding: 10px 20px;
+            font-family: 'Space Mono', monospace;
+            text-transform: uppercase; font-size: 0.8rem;
+            transition: 0.2s;
+            position: relative; overflow: hidden;
+        }
+        .btn-archive::after {
+            content: ''; position: absolute; top:0; left:0; width: 0%; height: 100%;
+            background: var(--accent-neon); z-index: -1; transition: 0.3s;
+        }
+        .btn-archive:hover { color: black; border-color: var(--accent-neon); }
+        .btn-archive:hover::after { width: 100%; }
+
+        /* Rarity Tag absolute */
+        .rarity-tag {
+            position: absolute; top: 50%; right: -30px;
+            transform: rotate(90deg) translateY(-50%);
+            font-family: 'Space Mono', monospace; font-size: 0.6rem;
+            color: var(--card-border); letter-spacing: 2px;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="noise-overlay"></div>
+    <div class="cursor-dot" id="cursor-dot"></div>
+    <div class="cursor-glow" id="cursor-glow"></div>
+    
+    <div class="grid-background"></div>
+
+    <div class="wrapper">
+        <header>
+            <div class="brand">
+                Plushies<br><span>.DEV</span>
+            </div>
+            <div class="meta-info">
+                sys_status: online<br>
+                db_connection: secure<br>
+                archived_items: 4,092
+            </div>
+        </header>
+
+        <section class="archive-grid" id="grid">
+            </section>
+    </div>
+
+    <script>
+        // Custom Cursor Logic
+        const dot = document.getElementById('cursor-dot');
+        const glow = document.getElementById('cursor-glow');
+
+        document.addEventListener('mousemove', (e) => {
+            dot.style.left = e.clientX + 'px';
+            dot.style.top = e.clientY + 'px';
+            
+            // Animation différée pour le glow (effet fluide)
+            glow.animate({
+                left: e.clientX + 'px',
+                top: e.clientY + 'px'
+            }, { duration: 500, fill: "forwards" });
+
+            // Update CSS variables for spotlight effect
+            document.querySelectorAll('.specimen-card').forEach(card => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                card.style.setProperty('--mouse-x', `${x}px`);
+                card.style.setProperty('--mouse-y', `${y}px`);
+            });
+        });
+
+        // Mock Data
+        const specimens = [
+            { name: "Rust Ferris", tech: "SYSTEM_LANG::RUST", id: "0X_RUST", img: "https://placehold.co/300x300/111/fff?text=RUST" },
+            { name: "Docker Whale", tech: "INFRA::CONTAINER", id: "0X_DOCK", img: "https://placehold.co/300x300/111/fff?text=DOCKER" },
+            { name: "Go Gopher", tech: "LANG::GOLANG", id: "0X_GOPH", img: "https://placehold.co/300x300/111/fff?text=GO" },
+            { name: "K8s Wheel", tech: "ORCHESTRA::K8S", id: "0X_HELM", img: "https://placehold.co/300x300/111/fff?text=K8S" },
+        ];
+
+        const grid = document.getElementById('grid');
+
+        specimens.forEach(item => {
+            const card = document.createElement('article');
+            card.className = 'specimen-card';
+            card.innerHTML = `
+                <div class="card-header">
+                    <span>ID: ${item.id}</span>
+                    <span>[SECURE]</span>
+                </div>
+                <div class="card-visual">
+                    <div class="visual-grid"></div>
+                    <img src="${item.img}" class="plush-img" alt="${item.name}">
+                </div>
+                <div class="rarity-tag">CONFIDENTIAL // ARCHIVE</div>
+                <div class="card-footer">
+                    <span class="specimen-tech">// ${item.tech}</span>
+                    <h2 class="specimen-name">${item.name}</h2>
+                    <div class="action-row">
+                        <span style="font-family:'Space Mono'; font-size:0.7rem; color:#555">QTY: 1</span>
+                        <button class="btn-archive">INITIALIZE</button>
+                    </div>
+                </div>
+            `;
+            grid.appendChild(card);
+        });
+    </script>
+</body>
+</html>

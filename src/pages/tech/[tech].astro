@@ -1,0 +1,71 @@
+---
+export const prerender = true;
+import Layout from "../../layouts/Layout.astro";
+import Header from "../../components/Header.astro";
+import PlushieCard from "../../components/PlushieCard.astro";
+import PlaceholderCard from "../../components/PlaceholderCard.astro";
+import { getCollection } from "astro:content";
+
+export async function getStaticPaths() {
+	const plushies = await getCollection("plushies");
+	const allTechs = new Set<string>();
+
+	plushies.forEach((plushie) => {
+		plushie.data.techs.forEach((tech) => {
+			allTechs.add(tech);
+		});
+	});
+
+	return Array.from(allTechs).map((tech) => {
+        // Simple slugify: lowercase and replace non-alphanumeric chars with hyphens
+        // Adjust logic if you have complex tech names like "C++" or "C#"
+        const slug = tech.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '');
+        
+		return {
+			params: { tech: slug },
+			props: { techName: tech },
+		};
+	});
+}
+
+const { techName } = Astro.props;
+const plushies = await getCollection("plushies");
+const filteredPlushies = plushies.filter((plushie) =>
+	plushie.data.techs.includes(techName),
+);
+
+// Logic for placeholders to maintain grid consistency
+const minItems = 8;
+const currentCount = filteredPlushies.length;
+const placeholderCount = currentCount < minItems ? minItems - currentCount : (4 - (currentCount % 4)) % 4; 
+// Ensure we at least fill a nice row or grid, or just minimal placeholders
+---
+
+<Layout title={`TECH :: ${techName}`}>
+	<Header />
+    
+    <div class="wrapper">
+        <!-- Titre de la facette en haut, style "Index" mais avec le contexte -->
+        <div class="flex flex-col items-center justify-center pb-16 gap-8 text-center relative z-10">
+            <div class="brand" style="line-height: 1.2;">
+                <span>// TECH :: </span> {techName.toUpperCase()}
+            </div>
+        </div>
+
+        <!-- Spacer to prevent overlap -->
+        <div class="h-32 w-full"></div>
+
+        <section class="archive-grid" id="grid">
+            {
+                filteredPlushies.map((plushie) => (
+                    <PlushieCard plushie={plushie} />
+                ))
+            }
+            {
+                Array.from({ length: placeholderCount }).map(() => (
+                    <PlaceholderCard />
+                ))
+            }
+        </section>
+    </div>
+</Layout>

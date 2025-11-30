@@ -1,0 +1,88 @@
+---
+export const prerender = true;
+import { getCollection } from "astro:content";
+import Layout from "../../layouts/Layout.astro";
+import Header from "../../components/Header.astro";
+import { Image } from "astro:assets";
+import LikeButton from "../../components/LikeButton";
+
+export async function getStaticPaths() {
+    const plushies = await getCollection("plushies");
+    return plushies.map((entry) => ({
+        params: { slug: entry.slug },
+        props: { entry },
+    }));
+}
+
+const { entry } = Astro.props;
+const { Content } = await entry.render();
+---
+
+<Layout title={entry.data.name}>
+    <Header />
+    <div class="wrapper" style="max-width: 800px;">
+        <a
+            href="/"
+            class="btn-archive"
+            style="margin-bottom: 2rem; display: inline-block;"
+            >&larr; BACK TO ARCHIVE</a
+        >
+
+        <article class="specimen-card" style="height: auto; padding: 2rem;">
+            <div class="card-header">
+                <span>ID: {entry.slug.toUpperCase()}</span>
+                <span>[SECURE]</span>
+            </div>
+
+            <div class="card-visual" style="height: 400px; margin: 2rem 0;">
+                <div class="visual-grid"></div>
+                <Image
+                    src={entry.data.image}
+                    alt={entry.data.name}
+                    class="plush-img"
+                    style="width: 50%;"
+                />
+            </div>
+
+            <div
+                class="card-footer"
+                style="background: transparent; border: none; padding: 0;"
+            >
+                <div class="specimen-tech">
+                    // {
+                        entry.data.techs.map((tech, index) => (
+                            <>
+                                {index > 0 && <span>::</span>}
+                                <a
+                                    href={`/tech/${tech.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)+/g, "")}`}
+                                    class="hover:text-white transition-colors underline decoration-dotted underline-offset-4"
+                                >
+                                    {tech.toUpperCase()}
+                                </a>
+                            </>
+                        ))
+                    }
+                </div>
+                <h1 class="specimen-name" style="font-size: 3rem;">
+                    {entry.data.name}
+                </h1>
+
+                <div
+                    class="content-body"
+                    style="margin-top: 2rem; font-family: 'Space Mono', monospace; color: var(--text-muted);"
+                >
+                    <Content />
+                </div>
+
+                <div class="action-row" style="margin-top: 3rem;">
+                    <a
+                        href={entry.data.official_link}
+                        target="_blank"
+                        class="btn-archive">OFFICIAL SOURCE</a
+                    >
+                    <LikeButton slug={entry.slug} client:load />
+                </div>
+            </div>
+        </article>
+    </div>
+</Layout>

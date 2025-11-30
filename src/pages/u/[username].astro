@@ -1,0 +1,15 @@
+---
+export const prerender = false;
+import Layout from "../../layouts/Layout.astro";
+import Header from "../../components/Header.astro";
+import ProfileGrid from "../../components/ProfileGrid";
+
+const username = Astro.url.pathname.split("/").pop() || "";
+---
+
+<Layout title="User Profile">
+    <Header />
+    <div class="wrapper">
+        <ProfileGrid username={username} client:load />
+    </div>
+</Layout>

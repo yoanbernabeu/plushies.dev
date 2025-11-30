@@ -1,0 +1,33 @@
+---
+interface Props {
+    class?: string;
+}
+
+const { class: className } = Astro.props;
+---
+
+<article class:list={["specimen-card", "opacity-30", className]}>
+    <div class="card-header">
+        <span>ID: COMING_SOON</span>
+        <span>[LOCKED]</span>
+    </div>
+    <div class="card-visual">
+        <div class="visual-grid"></div>
+        <div
+            class="plush-img flex items-center justify-center text-[var(--text-muted)] text-6xl"
+        >
+            ?
+        </div>
+    </div>
+    <div class="rarity-tag">COMING SOON // ARCHIVE</div>
+    <div class="card-footer">
+        <span class="specimen-tech">// PLACEHOLDER</span>
+        <h2 class="specimen-name">More Coming Soon</h2>
+        <div class="action-row">
+            <span style="font-family:'Space Mono'; font-size:0.7rem; color:#555"
+                >QTY: ?</span
+            >
+            <button class="btn-archive" disabled>LOCKED</button>
+        </div>
+    </div>
+</article>

@@ -1,0 +1,80 @@
+---
+export const prerender = true;
+import Layout from "../layouts/Layout.astro";
+import Header from "../components/Header.astro";
+import PlushieCard from "../components/PlushieCard.astro";
+import PlaceholderCard from "../components/PlaceholderCard.astro";
+import { getCollection } from "astro:content";
+
+const plushies = await getCollection("plushies");
+const placeholderCount = 7; // Add 7 placeholder cards to fill the grid
+const itemsPerPage = 8; // Show 8 items initially
+---
+
+<Layout title="PLUSHIES_ARCHIVE_V2">
+	<Header />
+	<section class="archive-grid" id="grid">
+		{
+			plushies.map((plushie, index) => (
+				<PlushieCard
+					plushie={plushie}
+					class={index >= itemsPerPage ? "hidden load-more-item" : ""}
+				/>
+			))
+		}
+		{
+			Array.from({ length: placeholderCount }).map((_, index) => (
+				<PlaceholderCard
+					class={
+						plushies.length + index >= itemsPerPage
+							? "hidden load-more-item"
+							: ""
+					}
+				/>
+			))
+		}
+	</section>
+
+	{
+		plushies.length + placeholderCount > itemsPerPage && (
+			<div class="text-center mt-12 mb-8">
+				<button
+					id="load-more-btn"
+					class="btn-archive text-lg px-8 py-4"
+				>
+					LOAD MORE [+
+					{plushies.length + placeholderCount - itemsPerPage}]
+				</button>
+			</div>
+		)
+	}
+</Layout>
+
+<script>
+	const loadMoreBtn = document.getElementById("load-more-btn");
+	const hiddenItems = document.querySelectorAll(".load-more-item");
+	let currentIndex = 0;
+	const itemsToShow = 8;
+
+	if (loadMoreBtn) {
+		loadMoreBtn.addEventListener("click", () => {
+			const itemsToReveal = Array.from(hiddenItems).slice(
+				currentIndex,
+				currentIndex + itemsToShow,
+			);
+			itemsToReveal.forEach((item) => {
+				item.classList.remove("hidden");
+			});
+
+			currentIndex += itemsToShow;
+
+			// Update button text
+			const remaining = hiddenItems.length - currentIndex;
+			if (remaining > 0) {
+				loadMoreBtn.textContent = `LOAD MORE [+${remaining}]`;
+			} else {
+				loadMoreBtn.style.display = "none";
+			}
+		});
+	}
+</script>

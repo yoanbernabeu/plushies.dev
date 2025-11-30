@@ -1,0 +1,99 @@
+---
+import { getCollection } from "astro:content";
+
+const plushies = await getCollection("plushies");
+const allTechs = new Set<string>();
+
+plushies.forEach((plushie) => {
+    plushie.data.techs.forEach((tech) => {
+        allTechs.add(tech);
+    });
+});
+
+const techs = Array.from(allTechs).sort();
+---
+
+<footer class="site-footer">
+    <div class="footer-content">
+        <div class="footer-section">
+            <h3>// EXPLORE BY TECH</h3>
+            <div class="tech-cloud">
+                {
+                    techs.map((tech) => {
+                        const slug = tech
+                            .toLowerCase()
+                            .replace(/[^a-z0-9]+/g, "-")
+                            .replace(/(^-|-$)+/g, "");
+                        return (
+                            <a href={`/tech/${slug}`} class="tech-link">
+                                {tech}
+                            </a>
+                        );
+                    })
+                }
+            </div>
+        </div>
+        <div class="footer-section copyright">
+            <p>
+                PLUSHIES.DEV © {new Date().getFullYear()} // OPEN SOURCE COLLECTION
+            </p>
+            <p style="margin-top: 0.5rem;">
+                Made with ❤️ by <a href="https://yoandev.co" target="_blank" style="color: var(--accent-neon); text-decoration: none;">YoanDev</a>
+            </p>
+        </div>
+    </div>
+</footer>
+
+<style>
+    .site-footer {
+        margin-top: 100px;
+        padding-top: 40px;
+        border-top: 1px solid var(--card-border);
+        color: var(--text-muted);
+        font-family: "Space Mono", monospace;
+        font-size: 0.8rem;
+    }
+
+    .footer-content {
+        display: flex;
+        flex-direction: column;
+        gap: 2rem;
+    }
+
+    .footer-section h3 {
+        color: var(--accent-neon);
+        margin-bottom: 1rem;
+        font-size: 0.9rem;
+        text-transform: uppercase;
+    }
+
+    .tech-cloud {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+    .tech-link {
+        color: var(--text-muted);
+        text-decoration: none;
+        border: 1px solid var(--card-border);
+        padding: 5px 10px;
+        border-radius: 4px;
+        transition: all 0.2s;
+        font-size: 0.75rem;
+        text-transform: uppercase;
+    }
+
+    .tech-link:hover {
+        color: var(--accent-neon);
+        border-color: var(--accent-neon);
+        background: rgba(204, 255, 0, 0.05);
+    }
+
+    .copyright {
+        margin-top: 2rem;
+        text-align: center;
+        opacity: 0.5;
+    }
+</style>
+

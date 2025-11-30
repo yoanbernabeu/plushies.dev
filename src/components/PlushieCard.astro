@@ -1,0 +1,46 @@
+---
+import type { CollectionEntry } from "astro:content";
+import { Image } from "astro:assets";
+import LikeButton from "./LikeButton";
+
+interface Props {
+    plushie: CollectionEntry<"plushies">;
+    class?: string;
+}
+
+const { plushie, class: className } = Astro.props;
+const { data, slug } = plushie;
+---
+
+<a
+    href={`/plushie/${slug}`}
+    class:list={["specimen-card", className]}
+    style="text-decoration: none; color: inherit;"
+>
+    <div class="card-header" style="align-items: center;">
+        <span>ID: {slug.toUpperCase()}</span>
+        <LikeButton slug={slug} compact client:load />
+    </div>
+    <div class="card-visual">
+        <div class="visual-grid"></div>
+        <Image
+            src={data.image}
+            alt={data.name}
+            class="plush-img"
+            width={300}
+            height={300}
+        />
+    </div>
+    <div class="rarity-tag">CONFIDENTIAL // ARCHIVE</div>
+    <div class="card-footer">
+        <span class="specimen-tech"
+            >// {data.techs.join("::").toUpperCase()}</span
+        >
+        <h2 class="specimen-name">{data.name}</h2>
+        <div class="action-row">
+            <span style="font-family:'Space Mono'; font-size:0.7rem; color:#555"
+                >QTY: 1</span
+            >
+        </div>
+    </div>
+</a>
